@@ -19,7 +19,6 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
-// Check if URL is blocked
 function isBlocked(url) {
   return new Promise((resolve) => {
     chrome.storage.local.get(['settings'], (result) => {

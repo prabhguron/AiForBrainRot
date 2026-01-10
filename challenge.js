@@ -33,12 +33,19 @@ function generateQuestion() {
 function showMessage(text, isSuccess) {
   const msgEl = document.getElementById('message');
   msgEl.textContent = text;
-  msgEl.className = `mb-4 p-4 rounded-lg ${isSuccess ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`;
-  msgEl.classList.remove('hidden');
+  msgEl.className = `alert visible ${isSuccess ? 'alert-success' : 'alert-error'}`;
+  
+  // React emoji
+  const emoji = document.getElementById('emojiFace');
+  emoji.textContent = isSuccess ? '😊' : '😠';
   
   setTimeout(() => {
-    msgEl.classList.add('hidden');
-  }, 3000);
+        loadQuestion();
+    msgEl.classList.remove('visible');
+    if (isSuccess) {
+      emoji.textContent = '😊';
+    } 
+  }, 2000);
 }
 
 // Load new question
@@ -47,17 +54,13 @@ function loadQuestion() {
   document.getElementById('question').textContent = currentQuestion.text;
   document.getElementById('answer').value = '';
   document.getElementById('answer').focus();
+  document.getElementById('emojiFace').textContent = '🤔';
 }
 
 // Check answer
 function checkAnswer() {
   const userAnswer = parseInt(document.getElementById('answer').value);
   
-  if (isNaN(userAnswer)) {
-    showMessage('Please enter a number!', false);
-    return;
-  }
-
   if (userAnswer === currentQuestion.answer) {
     score++;
     streak++;
@@ -70,19 +73,23 @@ function checkAnswer() {
     showMessage('🎉 Correct! You earned 5 minutes!', true);
     
     // Tell background script to grant time
-    chrome.runtime.sendMessage({ type: 'challengeComplete' }, () => {
+    chrome.runtime.sendMessage({ type: 'challengeComplete' }, (response) => {
       setTimeout(() => {
-        window.close();
-        window.history.back();
+        const blockedSiteUrl = response && response.blockedSiteUrl;
+        if (blockedSiteUrl) {
+          // Redirect back to the blocked site
+          window.location.href = blockedSiteUrl;
+        } else {
+          // Fallback: go back in history
+          window.history.back();
+        }
       }, 1500);
     });
-  } else {
+  } else if  (userAnswer != currentQuestion.answer) {
     streak = 0;
     localStorage.setItem('brainrot_streak', streak);
     document.getElementById('streak').textContent = streak;
-    
-    showMessage(`❌ Wrong! The answer was ${currentQuestion.answer}. Try again!`, false);
-    loadQuestion();
+    showMessage('workinginginging', false);
   }
 }
 

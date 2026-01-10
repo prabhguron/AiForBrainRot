@@ -23,7 +23,7 @@ function renderBlockedSites(sites) {
   const arr = Array.isArray(sites) ? sites : [];
   if (arr.length === 0) {
     const li = document.createElement('li');
-    li.className = 'py-2 px-2 text-sm text-gray-500';
+    li.className = 'blocked-item-empty';
     li.textContent = 'No blocked sites';
     list.appendChild(li);
     return;
@@ -31,10 +31,10 @@ function renderBlockedSites(sites) {
 
   arr.forEach(site => {
     const li = document.createElement('li');
-    li.className = 'py-2 px-2 flex justify-between items-center';
+    li.className = 'blocked-item';
     li.innerHTML = `
-      <span class="text-sm text-gray-700">${site}</span>
-      <button data-site="${site}" class="removeBtn text-sm text-red-500 hover:underline ml-4">Remove</button>
+      <span class="blocked-item-text">${site}</span>
+      <button data-site="${site}" class="removeBtn btn btn-danger">Remove</button>
     `;
     list.appendChild(li);
   });
@@ -81,11 +81,10 @@ document.getElementById('saveBtn').addEventListener('click', () => {
 
       const msg = document.getElementById('saveMessage');
       msg.textContent = '✅ Settings saved!';
-      msg.className = 'p-2 rounded-lg text-sm text-center bg-green-100 text-green-800';
-      msg.classList.remove('hidden');
+      msg.className = 'save-message visible save-message-success';
       
       setTimeout(() => {
-        msg.classList.add('hidden');
+        msg.classList.remove('visible');
       }, 2000);
     });
   });

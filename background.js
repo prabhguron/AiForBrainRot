@@ -42,6 +42,8 @@ chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
     
     // If time is up or first visit, redirect to challenge
     if (timeRemaining <= 0 || needsChallenge) {
+      // Store the blocked site URL to redirect back after challenge
+      chrome.storage.local.set({ blockedSiteUrl: details.url });
       chrome.tabs.update(details.tabId, {
         url: chrome.runtime.getURL('challenge.html')
       });
@@ -67,13 +69,15 @@ setInterval(() => {
 // Listen for messages from challenge page
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'challengeComplete') {
-    chrome.storage.local.get(['settings'], (result) => {
+    chrome.storage.local.get(['settings', 'blockedSiteUrl'], (result) => {
       const settings = result.settings || DEFAULT_SETTINGS;
+      const blockedSiteUrl = result.blockedSiteUrl || null;
       chrome.storage.local.set({
         timeRemaining: settings.rewardTime,
-        needsChallenge: false
+        needsChallenge: false,
+        blockedSiteUrl: null
       }, () => {
-        sendResponse({ success: true });
+        sendResponse({ success: true, blockedSiteUrl });
       });
     });
     return true; // Keep channel open for async response

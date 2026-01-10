@@ -4,46 +4,46 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BrainRotAI - Math Challenge</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gradient-to-br from-red-500 via-pink-500 to-purple-600 min-h-screen flex items-center justify-center p-4">
-  <div class="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8">
-    <div class="text-center mb-8">
-      <div class="inline-block p-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mb-4">
-        <span class="text-6xl">🧠</span>
-      </div>
-      <h1 class="text-4xl font-bold text-gray-800 mb-2">Time's Up!</h1>
-      <p class="text-gray-600">Solve this problem to continue browsing</p>
+<body class="challenge-container">
+  <div class="challenge-card">
+    <div class="challenge-header">
+      <span class="challenge-icon">🧠</span>
+      <h1 class="challenge-title">LOCK IN</h1>
+      <p class="challenge-subtitle">Solve this problem to continue browsing</p>
     </div>
 
-    <div id="message" class="hidden mb-4 p-4 rounded-lg"></div>
-
-    <div class="space-y-6">
-      <div class="text-center">
-        <div id="question" class="text-5xl font-bold text-gray-800 mb-6 py-8 bg-gray-50 rounded-xl"></div>
+    <div id="message" class="alert"></div>
+    
+    <div class="section-spacing">
+      <div class="challenge-section text-center">
+        <div id="question" class="question-text"></div>
         <input
           type="number"
           id="answer"
           placeholder="Your answer"
           autofocus
-          class="w-full px-6 py-4 text-2xl text-center border-2 border-purple-300 rounded-xl focus:ring-4 focus:ring-purple-500 focus:border-transparent"
+          class="question-input"
         />
       </div>
 
-      <button
-        id="submitBtn"
-        class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 rounded-xl font-bold text-lg hover:from-purple-700 hover:to-pink-700 transition shadow-lg hover:shadow-xl"
-      >
+      <button id="submitBtn" class="btn btn-primary">
         Submit Answer
       </button>
     </div>
 
-    <div class="mt-6 flex items-center justify-between text-sm text-gray-600">
-      <div>
-        <span>Score: <span id="score">0</span></span>
+    <div class="stats-container">
+      <div class="stat-item">
+        <span class="stat-label">Score</span>
+        <span class="stat-value" id="score">0</span>
       </div>
-      <div>
-        <span>🔥 Streak: <span id="streak">0</span></span>
+      <div class="stat-item">
+        <span class="emoji-face" id="emojiFace"></span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">🔥 Streak</span>
+        <span class="stat-value" id="streak">0</span>
       </div>
     </div>
   </div>

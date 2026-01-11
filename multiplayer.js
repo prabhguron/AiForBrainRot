@@ -126,7 +126,11 @@ function normalizeAnswer(answer) {
 
 // Get random question
 function getRandomQuestion() {
-  return questions[Math.floor(Math.random() * questions.length)];
+  const q = questions[Math.floor(Math.random() * questions.length)];
+  return {
+    text: q.text || q.question,
+    answer: q.answer
+  };
 }
 
 // Show message

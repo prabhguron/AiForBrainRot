@@ -6,43 +6,43 @@
   <title>BrainRotAI - Math Challenge</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="challenge-container">
-  <div class="challenge-card">
-    <div class="challenge-header">
-      <span class="challenge-icon">🧠</span>
-      <h1 class="challenge-title">LOCK IN</h1>
-      <p class="challenge-subtitle">Solve this problem to continue browsing</p>
+<body>
+  <div class="cartoon-box card card-sky" style="max-width: 500px; margin: 0 auto;">
+    <div class="mission-header">
+      <h2 class="mission-title">Solve the Problem</h2>
     </div>
 
     <div id="message" class="alert"></div>
     
-    <div class="section-spacing">
-      <div class="challenge-section text-center">
+    <div class="challenge-content">
+      <div class="question-box cartoon-box">
         <div id="question" class="question-text"></div>
+      </div>
+
+      <div class="answer-wrapper">
         <input
           type="number"
           id="answer"
           placeholder="Your answer"
           autofocus
-          class="question-input"
+          class="input-cartoon"
         />
+        <button id="submitBtn" class="btn btn-primary">
+          +
+        </button>
       </div>
-
-      <button id="submitBtn" class="btn btn-primary">
-        Submit Answer
-      </button>
     </div>
 
-    <div class="stats-container">
-      <div class="stat-item">
-        <span class="stat-label">Score</span>
+    <div class="stats-bar">
+      <div class="stat-compact">
+        <span class="stat-label">Score:</span>
         <span class="stat-value" id="score">0</span>
       </div>
-      <div class="stat-item">
-        <span class="emoji-face" id="emojiFace"></span>
+      <div class="stat-compact">
+        <span class="emoji-face" id="emojiFace">🤔</span>
       </div>
-      <div class="stat-item">
-        <span class="stat-label">🔥 Streak</span>
+      <div class="stat-compact">
+        <span class="stat-label">Streak:</span>
         <span class="stat-value" id="streak">0</span>
       </div>
     </div>

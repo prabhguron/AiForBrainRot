@@ -78,6 +78,5 @@ For full multiplayer functionality, see `FIREBASE_SETUP.md`. The extension works
 - Colorful, modern UI
 - Smooth animations
 - Clear feedback
-- Mobile-friendly
 
-Good luck with your hackathon! 🚀
+

@@ -23,18 +23,18 @@ function renderBlockedSites(sites) {
   const arr = Array.isArray(sites) ? sites : [];
   if (arr.length === 0) {
     const li = document.createElement('li');
-    li.className = 'blocked-item-empty';
-    li.textContent = 'No blocked sites';
+    li.textContent = 'No blocked sites yet';
+    li.style.textAlign = 'center';
+    li.style.opacity = '0.6';
     list.appendChild(li);
     return;
   }
 
   arr.forEach(site => {
     const li = document.createElement('li');
-    li.className = 'blocked-item';
     li.innerHTML = `
-      <span class="blocked-item-text">${site}</span>
-      <button data-site="${site}" class="removeBtn btn btn-danger">Remove</button>
+      <span>${site}</span>
+      <button data-site="${site}" class="remove-btn">Remove</button>
     `;
     list.appendChild(li);
   });
@@ -92,7 +92,7 @@ document.getElementById('saveBtn').addEventListener('click', () => {
 
 // Listen for remove clicks from the blocked list
 document.addEventListener('click', (e) => {
-  if (!e.target.matches || !e.target.matches('.removeBtn')) return;
+  if (!e.target.matches || !e.target.matches('.remove-btn')) return;
   const site = e.target.dataset.site;
   if (!site) return;
 
@@ -102,10 +102,9 @@ document.addEventListener('click', (e) => {
     chrome.storage.local.set({ settings }, () => {
       renderBlockedSites(settings.blockedSites);
       const msg = document.getElementById('saveMessage');
-      msg.textContent = 'Removed ' + site;
-      msg.className = 'p-2 rounded-lg text-sm text-center bg-yellow-100 text-yellow-800';
-      msg.classList.remove('hidden');
-      setTimeout(() => msg.classList.add('hidden'), 1500);
+      msg.textContent = '✅ ' + site + ' removed!';
+      msg.className = 'save-message visible save-message-success';
+      setTimeout(() => msg.classList.remove('visible'), 1500);
     });
   });
 });

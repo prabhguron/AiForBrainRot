@@ -7,59 +7,46 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="popup-page">
-  <div class="popup-container">
-    <h2 class="popup-header">⏰ BrainRotAI</h2>
-    
-    <div class="time-card">
-      <p class="time-label">Time Remaining</p>
-      <p class="time-display" id="timeDisplay">0:00</p>
+  <div class="popup-wrapper">
+    <div class="cartoon-box card card-orange popup-header-card">
+      <h1 class="popup-title">⏰ BrainRotAI</h1>
+      <p class="popup-subtitle">Stay focused, stay productive!</p>
     </div>
 
-    <div class="form-section">
+    <div class="cartoon-box card card-sky settings-card">
+      <div class="time-section">
+        <p class="section-label">Time Remaining</p>
+        <p class="time-display" id="timeDisplay">0:00</p>
+      </div>
+    </div>
+
+    <div class="cartoon-box card card-sky settings-card">
+      <h3 class="card-title">⚙️ Settings</h3>
+      
       <div class="form-group">
         <label class="form-label">Question Interval (minutes)</label>
-        <input
-          type="number"
-          id="questionInterval"
-          min="1"
-          class="form-input"
-        />
+        <input type="number" id="questionInterval" min="1" class="input-cartoon" />
       </div>
 
       <div class="form-group">
         <label class="form-label">Reward Time (minutes)</label>
-        <input
-          type="number"
-          id="rewardTime"
-          min="1"
-          class="form-input"
-        />
+        <input type="number" id="rewardTime" min="1" class="input-cartoon" />
       </div>
 
       <div class="form-group">
-        <label class="form-label">Add new website to block list (domain only, e.g., example.com)</label>
-        <input
-          type="text"
-          id="blockedSite"
-          placeholder="example.com"
-          class="form-input"
-        />
+        <label class="form-label">Add website (domain only)</label>
+        <div class="input-with-btn">
+          <input type="text" id="blockedSite" placeholder="example.com" class="input-cartoon" />
+          <button id="saveBtn" class="btn btn-success">Save</button>
+        </div>
       </div>
-
-      <button id="saveBtn" class="btn-secondary">
-        Save Settings
-      </button>
 
       <div id="saveMessage" class="save-message"></div>
-
-      <div class="blocked-section">
-        <label class="blocked-label">Blocked Websites</label>
-        <ul id="blockedList" class="blocked-list"></ul>
-      </div>
     </div>
 
-    <div class="popup-footer">
-      <p>Stay focused, stay productive! 🧠</p>
+    <div class="cartoon-box card card-rose blocked-card">
+      <h3 class="card-title">🚫 Blocked Websites</h3>
+      <ul id="blockedList" class="blocked-list-new"></ul>
     </div>
   </div>
 

@@ -491,3 +491,46 @@ body.popup-page {
   font-weight: 700;
   color: var(--pacific);
 }
+
+/* Firebase Config Section */
+.firebase-config-section {
+  margin: 15px 0;
+  border: 2px solid var(--grey);
+  border-radius: 12px;
+  padding: 10px;
+  background-color: var(--light);
+}
+
+.firebase-config-toggle {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--dark);
+  padding: 8px;
+  user-select: none;
+}
+
+.firebase-config-toggle:hover {
+  color: var(--pacific);
+}
+
+.firebase-config-content {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid var(--grey);
+}
+
+.firebase-help {
+  font-size: 0.85rem;
+  color: var(--dark);
+  opacity: 0.7;
+  margin-bottom: 10px;
+}
+
+.firebase-help a {
+  color: var(--pacific);
+  text-decoration: none;
+}
+
+.firebase-help a:hover {
+  text-decoration: underline;
+}

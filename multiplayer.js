@@ -1,15 +1,4 @@
-// Firebase configuration - REPLACE WITH YOUR FIREBASE CONFIG
-// Get this from Firebase Console > Project Settings > General > Your apps
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com/",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
-
+// Firebase configuration loaded from firebase-config.js (generated from env vars)
 // Initialize Firebase (only if config is valid)
 let db = null;
 let userId = null;
@@ -17,14 +6,55 @@ let currentMatchId = null;
 let isPlayer1 = false;
 let gameState = null;
 
-if (firebaseConfig.apiKey !== "YOUR_API_KEY") {
-  firebase.initializeApp(firebaseConfig);
-  db = firebase.database();
-  userId = generateUserId();
-} else {
-  // Fallback mode for demo (no Firebase)
-  console.warn("Firebase not configured. Using demo mode.");
+// Load Firebase config - first try from Chrome storage (set via popup), then from firebase-config.js
+async function loadFirebaseConfig() {
+  return new Promise((resolve) => {
+    // Try to load from Chrome storage first (set via popup settings)
+    chrome.storage.local.get(['firebaseConfig'], (result) => {
+      if (result.firebaseConfig && result.firebaseConfig.apiKey && result.firebaseConfig.apiKey !== "YOUR_API_KEY") {
+        resolve(result.firebaseConfig);
+        return;
+      }
+      
+      // Fallback to firebase-config.js (generated from env vars)
+      if (typeof firebaseConfig !== 'undefined' && firebaseConfig.apiKey && firebaseConfig.apiKey !== "YOUR_API_KEY") {
+        resolve(firebaseConfig);
+        return;
+      }
+      
+      // No valid config found
+      resolve(null);
+    });
+  });
 }
+
+// Initialize Firebase
+(async () => {
+  // Always generate userId (needed for demo mode too)
+  userId = generateUserId();
+  
+  const config = await loadFirebaseConfig();
+  
+  if (config && config.apiKey && config.apiKey !== "YOUR_API_KEY") {
+    try {
+      if (typeof firebase !== 'undefined') {
+        firebase.initializeApp(config);
+        db = firebase.database();
+        console.log("✅ Firebase initialized successfully");
+      } else {
+        console.warn("⚠️ Firebase SDK not loaded");
+        db = null;
+      }
+    } catch (error) {
+      console.error("❌ Firebase initialization error:", error);
+      db = null;
+    }
+  } else {
+    // Fallback mode for demo (no Firebase)
+    console.warn("⚠️ Firebase not configured. Using demo mode.");
+    db = null;
+  }
+})();
 
 // Generate unique user ID
 function generateUserId() {
@@ -109,7 +139,24 @@ function showMessage(text, isSuccess) {
 }
 
 // Start matchmaking
-function startMatchmaking() {
+async function startMatchmaking() {
+  // Wait a bit for Firebase to initialize if needed
+  if (!db) {
+    await new Promise(resolve => setTimeout(resolve, 100));
+    const config = await loadFirebaseConfig();
+    if (config && config.apiKey !== "YOUR_API_KEY") {
+      try {
+        if (!firebase.apps.length) {
+          firebase.initializeApp(config);
+        }
+        db = firebase.database();
+        userId = generateUserId();
+      } catch (e) {
+        console.error("Firebase init error:", e);
+      }
+    }
+  }
+  
   if (!db) {
     // Demo mode - simulate matchmaking
     matchmakingText.textContent = "Demo mode: Starting match...";
@@ -471,5 +518,12 @@ continueBtn.addEventListener('click', () => {
   });
 });
 
-// Start matchmaking on load
-startMatchmaking();
+// Start matchmaking on load (wait for DOM and Firebase init)
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => startMatchmaking(), 500);
+  });
+} else {
+  // DOM already loaded
+  setTimeout(() => startMatchmaking(), 500);
+}

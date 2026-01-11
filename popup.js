@@ -1,11 +1,19 @@
 // Load settings
-chrome.storage.local.get(['settings', 'timeRemaining', 'challengeMode'], (result) => {
+chrome.storage.local.get(['settings', 'timeRemaining', 'challengeMode', 'firebaseConfig'], (result) => {
   const settings = result.settings || { questionInterval: 300, rewardTime: 300 };
   const challengeMode = result.challengeMode || 'multiplayer';
+  const firebaseConfig = result.firebaseConfig || {};
   
   document.getElementById('questionInterval').value = settings.questionInterval / 60;
   document.getElementById('rewardTime').value = settings.rewardTime / 60;
   document.getElementById('challengeMode').value = challengeMode;
+  
+  // Load Firebase config if exists
+  if (firebaseConfig.apiKey) document.getElementById('firebaseApiKey').value = firebaseConfig.apiKey;
+  if (firebaseConfig.projectId) document.getElementById('firebaseProjectId').value = firebaseConfig.projectId;
+  if (firebaseConfig.databaseURL) document.getElementById('firebaseDatabaseUrl').value = firebaseConfig.databaseURL;
+  if (firebaseConfig.messagingSenderId) document.getElementById('firebaseMessagingSenderId').value = firebaseConfig.messagingSenderId;
+  if (firebaseConfig.appId) document.getElementById('firebaseAppId').value = firebaseConfig.appId;
   
   updateTimeDisplay(result.timeRemaining || 0);
 });
@@ -56,6 +64,13 @@ document.getElementById('saveBtn').addEventListener('click', () => {
   const challengeMode = document.getElementById('challengeMode').value;
   const blockedInput = document.getElementById('blockedSite').value.trim();
   
+  // Get Firebase config
+  const firebaseApiKey = document.getElementById('firebaseApiKey').value.trim();
+  const firebaseProjectId = document.getElementById('firebaseProjectId').value.trim();
+  const firebaseDatabaseUrl = document.getElementById('firebaseDatabaseUrl').value.trim();
+  const firebaseMessagingSenderId = document.getElementById('firebaseMessagingSenderId').value.trim();
+  const firebaseAppId = document.getElementById('firebaseAppId').value.trim();
+  
   chrome.storage.local.get(['settings'], (result) => {
     const settings = result.settings || {};
     settings.questionInterval = questionInterval;
@@ -75,9 +90,24 @@ document.getElementById('saveBtn').addEventListener('click', () => {
       }
     }
     
+    // Build Firebase config if any fields are filled
+    let firebaseConfig = null;
+    if (firebaseApiKey && firebaseApiKey !== 'YOUR_API_KEY') {
+      firebaseConfig = {
+        apiKey: firebaseApiKey,
+        authDomain: firebaseProjectId ? `${firebaseProjectId}.firebaseapp.com` : undefined,
+        databaseURL: firebaseDatabaseUrl || (firebaseProjectId ? `https://${firebaseProjectId}-default-rtdb.firebaseio.com/` : undefined),
+        projectId: firebaseProjectId,
+        storageBucket: firebaseProjectId ? `${firebaseProjectId}.appspot.com` : undefined,
+        messagingSenderId: firebaseMessagingSenderId,
+        appId: firebaseAppId
+      };
+    }
+    
     chrome.storage.local.set({ 
       settings,
-      challengeMode 
+      challengeMode,
+      firebaseConfig: firebaseConfig
     }, () => {
       // Clear the blockedSite input after saving
       document.getElementById('blockedSite').value = '';

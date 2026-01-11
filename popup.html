@@ -44,6 +44,33 @@
         </select>
       </div>
 
+      <details class="firebase-config-section">
+        <summary class="firebase-config-toggle">🔑 Firebase Configuration (for Multiplayer)</summary>
+        <div class="firebase-config-content">
+          <p class="firebase-help">Get these from <a href="https://console.firebase.google.com/" target="_blank">Firebase Console</a></p>
+          <div class="form-group">
+            <label class="form-label">API Key</label>
+            <input type="text" id="firebaseApiKey" placeholder="AIzaSy..." class="form-input" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Project ID</label>
+            <input type="text" id="firebaseProjectId" placeholder="your-project-id" class="form-input" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Database URL</label>
+            <input type="text" id="firebaseDatabaseUrl" placeholder="https://your-project-default-rtdb.firebaseio.com/" class="form-input" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Messaging Sender ID</label>
+            <input type="text" id="firebaseMessagingSenderId" placeholder="123456789" class="form-input" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">App ID</label>
+            <input type="text" id="firebaseAppId" placeholder="1:123456789:web:abc123" class="form-input" />
+          </div>
+        </div>
+      </details>
+
       <div class="form-group">
         <label class="form-label">Add new website to block list (domain only, e.g., example.com)</label>
         <input

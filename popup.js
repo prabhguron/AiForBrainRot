@@ -1,9 +1,11 @@
 // Load settings
-chrome.storage.local.get(['settings', 'timeRemaining'], (result) => {
+chrome.storage.local.get(['settings', 'timeRemaining', 'challengeMode'], (result) => {
   const settings = result.settings || { questionInterval: 300, rewardTime: 300 };
+  const challengeMode = result.challengeMode || 'multiplayer';
   
   document.getElementById('questionInterval').value = settings.questionInterval / 60;
   document.getElementById('rewardTime').value = settings.rewardTime / 60;
+  document.getElementById('challengeMode').value = challengeMode;
   
   updateTimeDisplay(result.timeRemaining || 0);
 });
@@ -51,6 +53,7 @@ function updateTimeDisplay(seconds) {
 document.getElementById('saveBtn').addEventListener('click', () => {
   const questionInterval = parseInt(document.getElementById('questionInterval').value) * 60;
   const rewardTime = parseInt(document.getElementById('rewardTime').value) * 60;
+  const challengeMode = document.getElementById('challengeMode').value;
   const blockedInput = document.getElementById('blockedSite').value.trim();
   
   chrome.storage.local.get(['settings'], (result) => {
@@ -72,7 +75,10 @@ document.getElementById('saveBtn').addEventListener('click', () => {
       }
     }
     
-    chrome.storage.local.set({ settings }, () => {
+    chrome.storage.local.set({ 
+      settings,
+      challengeMode 
+    }, () => {
       // Clear the blockedSite input after saving
       document.getElementById('blockedSite').value = '';
 

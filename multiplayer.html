@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrainRotAI - 1v1 Challenge</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="challenge-container">
+  <div class="challenge-card multiplayer-card">
+    <!-- Matchmaking Screen -->
+    <div id="matchmakingScreen" class="matchmaking-screen">
+      <div class="challenge-header">
+        <span class="challenge-icon">⚔️</span>
+        <h1 class="challenge-title">1v1 BATTLE</h1>
+        <p class="challenge-subtitle">Find an opponent and compete for time!</p>
+      </div>
+      
+      <div class="matchmaking-status">
+        <div class="loading-spinner"></div>
+        <p id="matchmakingText">Searching for opponent...</p>
+      </div>
+      
+      <button id="cancelMatchmaking" class="btn btn-secondary">Cancel</button>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="gameScreen" class="game-screen hidden">
+      <div class="challenge-header">
+        <span class="challenge-icon">⚔️</span>
+        <h1 class="challenge-title">BATTLE MODE</h1>
+        <p class="challenge-subtitle">First to answer correctly wins!</p>
+      </div>
+
+      <div class="opponent-info">
+        <div class="player-card">
+          <div class="player-name">You</div>
+          <div class="player-score" id="yourScore">0</div>
+        </div>
+        <div class="vs-divider">VS</div>
+        <div class="player-card">
+          <div class="player-name" id="opponentName">Opponent</div>
+          <div class="player-score" id="opponentScore">0</div>
+        </div>
+      </div>
+
+      <div id="message" class="alert"></div>
+      
+      <div class="section-spacing">
+        <div class="challenge-section text-center">
+          <div id="question" class="question-text"></div>
+          <input
+            type="text"
+            id="answer"
+            placeholder="Your answer"
+            autofocus
+            class="question-input"
+            autocomplete="off"
+          />
+        </div>
+
+        <button id="submitBtn" class="btn btn-primary">
+          Submit Answer
+        </button>
+      </div>
+
+      <div class="game-stats">
+        <div class="stat-item">
+          <span class="stat-label">Round</span>
+          <span class="stat-value" id="roundNumber">1</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Wins</span>
+          <span class="stat-value" id="wins">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="resultsScreen" class="results-screen hidden">
+      <div class="challenge-header">
+        <span class="challenge-icon" id="resultEmoji">🏆</span>
+        <h1 class="challenge-title" id="resultTitle">VICTORY!</h1>
+        <p class="challenge-subtitle" id="resultSubtitle">You won the battle!</p>
+      </div>
+      
+      <div class="final-score">
+        <div class="final-score-item">
+          <span class="final-score-label">Your Score</span>
+          <span class="final-score-value" id="finalYourScore">0</span>
+        </div>
+        <div class="final-score-item">
+          <span class="final-score-label">Opponent Score</span>
+          <span class="final-score-value" id="finalOpponentScore">0</span>
+        </div>
+      </div>
+
+      <div class="time-reward">
+        <p class="time-reward-label">Time Reward</p>
+        <p class="time-reward-value" id="timeReward">+5 minutes</p>
+      </div>
+
+      <button id="continueBtn" class="btn btn-primary">Continue Browsing</button>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+  <script src="multiplayer.js"></script>
+</body>
+</html>

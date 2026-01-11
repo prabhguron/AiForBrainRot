@@ -1,23 +1,7 @@
-# BrainRotAI - 1v1 Multiplayer Extension
+# BrainRotAI - Stop Scrolling 🧠
+A Chrome extension that combats endless scrolling by earning your access to time-wasting websites.
 
-A Chrome extension that blocks distracting websites and rewards you with browsing time by competing in 1v1 trivia battles!
-
-## 🎮 Features
-
-### 1v1 Multiplayer Mode (NEW!)
-- **Real-time matchmaking** - Find opponents instantly
-- **Competitive trivia** - Answer questions faster than your opponent
-- **Time rewards** - Winners get 10 minutes, losers get 2 minutes
-- **Live score tracking** - See your progress in real-time
-- **30+ questions** - Mix of math, geography, science, and general knowledge
-
-### Single Player Mode
-- Traditional math challenges
-- Solve problems to earn browsing time
-- Track your score and streak
-
-## 🚀 Quick Start
-
+##  Quick Start
 1. **Load the Extension**
    - Open Chrome and go to `chrome://extensions/`
    - Enable "Developer mode"
@@ -34,49 +18,67 @@ A Chrome extension that blocks distracting websites and rewards you with browsin
    - See `FIREBASE_SETUP.md` for Firebase setup
    - Or use Demo Mode (works without Firebase!)
 
-## 🎯 How It Works
+## Inspiration
+We realized that willpower alone isn't enough to resist the dopamine hits from social media. Instead of blocking sites completely, we wanted to create a system that rewards mental effort—solve a quick math problem, quizz, you name it! to earn time to browse guilt-free. It's a fun way to make productivity feel like a game.
 
-1. Visit a blocked site (YouTube, Instagram, TikTok, etc.)
-2. If you're out of time, you'll be redirected to a challenge
-3. In **Multiplayer Mode**: Find an opponent and compete in real-time
-4. Answer questions correctly and faster than your opponent
-5. Win rounds to earn browsing time
-6. Continue browsing once you have time!
+## What it does
+- Blocks addictive sites (YouTube, Instagram, TikTok, Twitter, Reddit, Facebook) by default
+- When you try to visit a blocked site, you're redirected to a challenge
+- Solve the challenge correctly and earn 5 minutes (or more...) of browsing time as a reward
+- Keeps track of your challenge score and current streak to motivate you
+- Configure question intervals, reward time, and manage your blocked sites list
+- Fun, playful interface that makes productivity feel less like punishment
 
-## 🏆 Hackathon Features
+## How we built it
+**Tech Stack:**
+- Chrome Extension API (manifest.json, background script, content script)
+- JavaScript (vanilla, no frameworks)
+- HTML5 + CSS3
+- Chrome Storage API for persisting user data
 
-- **Impressive Demo**: 1v1 multiplayer is visually engaging
-- **Real-time Sync**: Firebase integration for live matches
-- **Demo Mode**: Works without setup for quick demos
-- **Beautiful UI**: Modern, colorful design
-- **Competitive Element**: Makes productivity fun!
+**Architecture:**
+- `manifest.json` - Extension configuration
+- `background.js` - Timer countdown, website blocking logic, message routing
+- `challenge.html/js` - Math challenge UI with cartoony styling
+- `popup.html/js` - Settings panel for users to customize experience
+- `style.css` - Unified cartoon-themed styling
+- `content.js` - Page injection logic
 
-## 📝 Files
+**Key Features:**
+- Real-time countdown timer stored in Chrome storage
+- Math problem generation with multiple difficulty levels
+- Dynamic site blocking based on user configuration
+- Redirect system to send users back to original site after challenge completion
 
-- `multiplayer.html` - 1v1 battle interface
-- `multiplayer.js` - Game logic and Firebase integration
-- `challenge.html` - Single player mode
-- `challenge.js` - Single player logic
-- `content.js` - Site blocking logic
-- `background.js` - Time management
-- `popup.html/js` - Settings interface
+## Challenges we ran into
+**Redirect Logic** - Storing the original blocked site URL and redirecting after challenge completion involved managing window/tab states
 
-## 🔧 Setup Firebase (Optional)
+**UI Polish** - Creating a visually appealing, cartoony interface while maintaining usability across different popup sizes
 
-For full multiplayer functionality, see `FIREBASE_SETUP.md`. The extension works in demo mode without Firebase!
+**State Management** - Tracking score, streak, and settings across multiple pages and extension contexts
 
-## 💡 Tips for Hackathon Demo
+## Accomplishments that we're proud of
 
-1. **Use Demo Mode**: Works immediately without setup
-2. **Show Both Modes**: Switch between single and multiplayer
-3. **Highlight Competition**: Show the real-time battle aspect
-4. **Emphasize Fun**: Make productivity competitive and engaging
-5. **Show Time Rewards**: Demonstrate the incentive system
+- Created a cohesive, playful design with cartoon boxes, bold borders, and fun colors that makes productivity feel like a game
+- Score and streak systems that genuinely motivate users to solve challenges
+- No external dependencies, pure vanilla JS, minimal performance impact
+- Seamlessly returns users to the exact site they were trying to visit after completing a challenge
+- Works on different screen sizes; challenge page and popup both feel polished and intentional
 
-## 🎨 Design
+## What we learned
+- Chrome Extension API is powerful but requires careful state management
+- User customization (blocking specific sites, adjusting time rewards) is critical for adoption
+- Small UX details (animations, emojis, visual feedback) make the difference between a tool that feels janky and one that feels delightful
 
-- Colorful, modern UI
-- Smooth animations
-- Clear feedback
+## What's next for Stop Scrolling
+**AI-Powered Difficulty Scaling** - Adjust math problem difficulty based on user performance
 
+**Leaderboards** - Share scores with friends and create friendly competition
 
+**Pomodoro Integration** - Built-in pomodoro timer that syncs with browsing time rewards
+
+**Achievements & Badges** - Unlock badges for milestones (100 correct answers, 7-day streak, etc.)
+
+**Focus Mode** - "Iron Will" mode that locks users out completely during focus sessions
+
+ **Customizable Challenges** - Let users choose between math problems, trivia, or coding challenges

@@ -146,13 +146,19 @@ async function startMatchmaking() {
     const config = await loadFirebaseConfig();
     if (config && config.apiKey !== "YOUR_API_KEY") {
       try {
-        if (!firebase.apps.length) {
-          firebase.initializeApp(config);
+        if (typeof firebase !== 'undefined') {
+          if (!firebase.apps || !firebase.apps.length) {
+            firebase.initializeApp(config);
+          }
+          db = firebase.database();
+          userId = generateUserId();
+          console.log("✅ Firebase initialized in delayed start");
+        } else {
+          console.warn("⚠️ Firebase SDK still not available; continuing in demo mode.");
         }
-        db = firebase.database();
-        userId = generateUserId();
       } catch (e) {
         console.error("Firebase init error:", e);
+        db = null;
       }
     }
   }

@@ -1,3 +1,6 @@
+// Helper to get element by id
+const el = id => document.getElementById(id);
+
 // Load settings
 chrome.storage.local.get(['settings', 'timeRemaining', 'challengeMode', 'firebaseConfig'], (result) => {
   const settings = result.settings || { questionInterval: 300, rewardTime: 300 };
@@ -9,11 +12,12 @@ chrome.storage.local.get(['settings', 'timeRemaining', 'challengeMode', 'firebas
   document.getElementById('challengeMode').value = challengeMode;
   
   // Load Firebase config if exists
-  if (firebaseConfig.apiKey) document.getElementById('firebaseApiKey').value = firebaseConfig.apiKey;
-  if (firebaseConfig.projectId) document.getElementById('firebaseProjectId').value = firebaseConfig.projectId;
-  if (firebaseConfig.databaseURL) document.getElementById('firebaseDatabaseUrl').value = firebaseConfig.databaseURL;
-  if (firebaseConfig.messagingSenderId) document.getElementById('firebaseMessagingSenderId').value = firebaseConfig.messagingSenderId;
-  if (firebaseConfig.appId) document.getElementById('firebaseAppId').value = firebaseConfig.appId;
+  // Populate firebase fields only if corresponding inputs exist
+  if (firebaseConfig.apiKey && el('firebaseApiKey')) el('firebaseApiKey').value = firebaseConfig.apiKey;
+  if (firebaseConfig.projectId && el('firebaseProjectId')) el('firebaseProjectId').value = firebaseConfig.projectId;
+  if (firebaseConfig.databaseURL && el('firebaseDatabaseUrl')) el('firebaseDatabaseUrl').value = firebaseConfig.databaseURL;
+  if (firebaseConfig.messagingSenderId && el('firebaseMessagingSenderId')) el('firebaseMessagingSenderId').value = firebaseConfig.messagingSenderId;
+  if (firebaseConfig.appId && el('firebaseAppId')) el('firebaseAppId').value = firebaseConfig.appId;
   
   updateTimeDisplay(result.timeRemaining || 0);
 });
@@ -62,14 +66,15 @@ document.getElementById('saveBtn').addEventListener('click', () => {
   const questionInterval = parseInt(document.getElementById('questionInterval').value) * 60;
   const rewardTime = parseInt(document.getElementById('rewardTime').value) * 60;
   const challengeMode = document.getElementById('challengeMode').value;
-  const blockedInput = document.getElementById('blockedSite').value.trim();
+  const blockedEl = document.getElementById('blockedSite');
+  const blockedInput = blockedEl ? blockedEl.value.trim() : '';
   
   // Get Firebase config
-  const firebaseApiKey = document.getElementById('firebaseApiKey').value.trim();
-  const firebaseProjectId = document.getElementById('firebaseProjectId').value.trim();
-  const firebaseDatabaseUrl = document.getElementById('firebaseDatabaseUrl').value.trim();
-  const firebaseMessagingSenderId = document.getElementById('firebaseMessagingSenderId').value.trim();
-  const firebaseAppId = document.getElementById('firebaseAppId').value.trim();
+  const firebaseApiKey = el('firebaseApiKey') ? el('firebaseApiKey').value.trim() : '';
+  const firebaseProjectId = el('firebaseProjectId') ? el('firebaseProjectId').value.trim() : '';
+  const firebaseDatabaseUrl = el('firebaseDatabaseUrl') ? el('firebaseDatabaseUrl').value.trim() : '';
+  const firebaseMessagingSenderId = el('firebaseMessagingSenderId') ? el('firebaseMessagingSenderId').value.trim() : '';
+  const firebaseAppId = el('firebaseAppId') ? el('firebaseAppId').value.trim() : '';
   
   chrome.storage.local.get(['settings'], (result) => {
     const settings = result.settings || {};
@@ -77,16 +82,20 @@ document.getElementById('saveBtn').addEventListener('click', () => {
     settings.rewardTime = rewardTime;
     // Ensure blockedSites exists
     if (!Array.isArray(settings.blockedSites)) settings.blockedSites = [];
-    console.log('Current blocked sites:', settings.blockedSites);
+    console.log('Current blocked sites (before):', settings.blockedSites);
 
     // If user entered a domain, normalize and add it
+    let addedDomain = null;
     if (blockedInput) {
       let domain = blockedInput.toLowerCase();
-          console.log('Current blocked sites:', settings.blockedSites);
-
       domain = domain.replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0];
-      if (domain && !settings.blockedSites.includes(domain)) {
-        settings.blockedSites.push(domain);
+      if (domain) {
+        if (!settings.blockedSites.includes(domain)) {
+          settings.blockedSites.push(domain);
+          addedDomain = domain;
+        } else {
+          console.log('Domain already in blocked list:', domain);
+        }
       }
     }
     
@@ -110,18 +119,27 @@ document.getElementById('saveBtn').addEventListener('click', () => {
       firebaseConfig: firebaseConfig
     }, () => {
       // Clear the blockedSite input after saving
-      document.getElementById('blockedSite').value = '';
+      if (blockedEl) blockedEl.value = '';
 
-      // Re-render the blocked list
-      renderBlockedSites(settings.blockedSites);
+      // Read back settings to ensure write succeeded, then render
+      chrome.storage.local.get(['settings'], (res) => {
+        const newSettings = res.settings || {};
+        if (!Array.isArray(newSettings.blockedSites)) newSettings.blockedSites = [];
+        console.log('Current blocked sites (after):', newSettings.blockedSites);
+        renderBlockedSites(newSettings.blockedSites);
 
-      const msg = document.getElementById('saveMessage');
-      msg.textContent = '✅ Settings saved!';
-      msg.className = 'save-message visible save-message-success';
-      
-      setTimeout(() => {
-        msg.classList.remove('visible');
-      }, 2000);
+        const msg = document.getElementById('saveMessage');
+        if (addedDomain) {
+          msg.textContent = `✅ ${addedDomain} added!`;
+        } else {
+          msg.textContent = '✅ Settings saved!';
+        }
+        msg.className = 'save-message visible save-message-success';
+        
+        setTimeout(() => {
+          msg.classList.remove('visible');
+        }, 2000);
+      });
     });
   });
 });

@@ -10,6 +10,11 @@
   --tint-orange: #ffedd5;
   --tint-sky: #e0f2fe;
   --tint-rose: #ffe4e6;
+  --grey: #94a3b8;
+  --pacific: #0284c7;
+  --dark: #0f172a;
+  --light: #ffffff;
+  --tomato: #ef4444;
 }
 
 * {
@@ -43,6 +48,40 @@ body {
   border-radius: 24px;
   padding: 24px;
 }
+
+/* Challenge / Multiplayer card */
+.challenge-card {
+  max-width: 720px;
+  width: 100%;
+  background: linear-gradient(180deg, white 0%, var(--tint-sky) 100%);
+  border-radius: 18px;
+  padding: 18px;
+  border: 4px solid var(--ink-dark);
+}
+
+.challenge-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  margin-bottom: 12px;
+}
+
+.challenge-icon { font-size: 2rem; }
+.challenge-title { font-size: 1.4rem; font-weight: 800; }
+.challenge-subtitle { opacity: 0.75; font-weight: 600; font-size: 0.95rem; }
+
+/* Question input in multiplayer page */
+.question-text { font-size: 1.4rem; font-weight: 800; }
+.question-input {
+  width: 100%;
+  border: 3px solid var(--dark);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-weight: 700;
+  font-size: 1rem;
+}
+.section-spacing { margin-top: 18px; }
 
 .card-orange { background-color: var(--tint-orange); }
 .card-sky { background-color: var(--tint-sky); }

@@ -73,7 +73,7 @@ function checkAnswer() {
     showMessage('🎉 Correct! You earned 5 minutes!', true);
     
     // Tell background script to grant time
-    chrome.runtime.sendMessage({ type: 'challengeComplete' }, (response) => {
+  chrome.runtime.sendMessage({ type: 'challengeComplete' }, (response) => {
       setTimeout(() => {
         const blockedSiteUrl = response && response.blockedSiteUrl;
         if (blockedSiteUrl) {
@@ -89,7 +89,7 @@ function checkAnswer() {
     streak = 0;
     localStorage.setItem('brainrot_streak', streak);
     document.getElementById('streak').textContent = streak;
-    showMessage('workinginginging', false);
+    showMessage('Incorrect Answer...', false);
   }
 }
 

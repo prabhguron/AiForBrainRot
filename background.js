@@ -72,8 +72,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     chrome.storage.local.get(['settings', 'blockedSiteUrl'], (result) => {
       const settings = result.settings || DEFAULT_SETTINGS;
       const blockedSiteUrl = result.blockedSiteUrl || null;
+      // Use custom reward time if provided (for multiplayer), otherwise use default
+      const rewardTime = message.rewardTime || settings.rewardTime;
       chrome.storage.local.set({
-        timeRemaining: settings.rewardTime,
+        timeRemaining: rewardTime,
         needsChallenge: false,
         blockedSiteUrl: null
       }, () => {
